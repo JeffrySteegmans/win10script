@@ -32,13 +32,24 @@ $tweaks = @(
 	### Chris Titus Tech Additions
 	"TitusRegistryTweaks",
 	"InstallTitusProgs", #REQUIRED FOR OTHER PROGRAM INSTALLS!
+	"SetPowershellProfile",
 	"Install7Zip",
 	"InstallNotepadplusplus",
 	"InstallIrfanview",
 	"InstallVLC",
 	"InstallAdobe",
-	#"InstallBrave",
+	"InstallBrave",
 	"InstallChrome",
+	"InstallFirefox",
+	"InstallPutty",
+	"InstallVSCode",
+	"InstallConEmu",
+	"InstallmRemoteNg",
+	"InstallNextcloud",
+	"InstallOpenVPN",
+	"InstallWindirStat",
+	"InstallWindowsTerminal",
+	"InstallGreenshot",
 	# "ChangeDefaultApps", # Removed due to issues with steam and resetting default apps
 
 	### Windows Apps
@@ -219,6 +230,33 @@ function Show-Choco-Menu {
 	until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
 }
 
+function Import-Reg-settings {
+	param(
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[string]$Title,
+
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty()]
+		[string]$Filename
+	)
+
+	do {
+		Clear-Host
+		Write-Host "================ $Title ================"
+		Write-Host "Y: Press 'Y' to do this."
+		Write-Host "2: Press 'N' to skip this."
+		Write-Host "Q: Press 'Q' to stop the entire script."
+		$selection = Read-Host "Please make a selection"
+		switch ($selection) {
+			'y' { REG IMPORT C:\sysprep\$Filename.reg }
+			'n' { Break }
+			'q' { Exit }
+		}
+	}
+	until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
+}
+
 Function TitusRegistryTweaks {
 	Write-Output "Improving Windows Update to delay Feature updates and only install Security Updates"
 	### Fix Windows Update to delay feature updates and only update at certain times
@@ -235,15 +273,8 @@ Function TitusRegistryTweaks {
 	Set-ItemProperty -Path $UpdatesPath -Name "ActiveHoursStart" -Type DWord -Value 8
 }
 
-Function InstallTitusProgs {
-	Write-Output "Installing Chocolatey"
-	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	choco install chocolatey-core.extension -y
-	Write-Output "Running O&O Shutup with Recommended Settings"
-	Import-Module BitsTransfer
-	Start-BitsTransfer -Source "https://raw.githubusercontent.com/ChrisTitusTech/win10script/master/ooshutup10.cfg" -Destination ooshutup10.cfg
-	Start-BitsTransfer -Source "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -Destination OOSU10.exe
-	./OOSU10.exe ooshutup10.cfg /quiet
+Function InstallJSProgs {
+
 }
 
 Function InstallAdobe {
@@ -273,6 +304,11 @@ Function InstallBrave {
 Function InstallChrome {
 	Show-Choco-Menu -Title "Do you want to install Chrome?" -ChocoInstall "googlechrome"
 }
+
+Function InstallFirefox {
+	Show-Choco-Menu -Title "Do you want to install Firefox?" -ChocoInstall "firefox"
+}
+
 Function Install7Zip {
 	Show-Choco-Menu -Title "Do you want to install 7-Zip?" -ChocoInstall "7zip"
 }
@@ -287,6 +323,75 @@ Function InstallVLC {
 
 Function InstallIrfanview {
 	Show-Choco-Menu -Title "Do you want to install Irfanview?" -ChocoInstall "irfanview"
+}
+
+function InstallPutty {
+	Show-Choco-Menu -Title "Do you want to install Putty?" -ChocoInstall "putty"
+	Import-Reg-settings -Title "Do you want to import Putty settings?" -Filename "putty"
+}
+
+function InstallVSCode {
+	Show-Choco-Menu -Title "Do you want to install Visual Studio Code?" -ChocoInstall "vscode"
+}
+
+function InstallConEmu {
+	Show-Choco-Menu -Title "Do you want to install ConEmu?" -ChocoInstall "conemu"
+}
+
+function InstallGit {
+	Show-Choco-Menu -Title "Do you want to install Git?" -ChocoInstall "git"
+	Show-Choco-Menu -Title "Do you want to install PoshGit?" -ChocoInstall "poshgit"
+	Add-PoshGitToProfile -AllUsers -AllHosts
+	Show-Choco-Menu -Title "Do you want to install Git Extensions?" -ChocoInstall "gitextensions"
+}
+
+function InstallmRemoteNg {
+	Show-Choco-Menu -Title "Do you want to install mRemoteNg?" -ChocoInstall "mremoteng"
+}
+
+function InstallNextcloud {
+	Show-Choco-Menu -Title "Do you want to install Nextcloud?" -ChocoInstall "nextcloud-client"
+}
+
+function InstallOpenVPN {
+	Show-Choco-Menu -Title "Do you want to install OpenVPN?" -ChocoInstall "openvpn"
+}
+
+function InstallWindirStat {
+	Show-Choco-Menu -Title "Do you want to install WindirStat?" -ChocoInstall "windirstat"
+}
+
+function InstallWindowsTerminal {
+	Show-Choco-Menu -Title "Do you want to install Windows Terminal?" -ChocoInstall "microsoft-windows-terminal"
+}
+
+function InstallGreenshot {
+	Show-Choco-Menu -Title "Do you want to install Greenshot?" -ChocoInstall "greenshot"
+}
+
+SetPowershellProfile {
+	$dest = $PROFILE.CurrentUserAllHosts
+	if (-not (Test-Path $dest)) {New-Item $dest -Type File -Force }
+	Split-Path $dest | Push-Location
+	Start-BitsTransfer https://raw.githubusercontent.com/neilpa/cmd-colors-solarized/master/Set-SolarizedDarkColorDefaults.ps1
+	Start-BitsTransfer https://raw.githubusercontent.com/JeffrySteegmans/win10script/develop/powershell/profile.ps1
+	# Start-BitsTransfer https://raw.githubusercontent.com/ligz08/PowerShell-Profile/master/psfunctions.ps1
+	# Start-BitsTransfer https://raw.githubusercontent.com/ligz08/PowerShell-Profile/master/psaliases.ps1
+	Pop-Location
+	# Note: the last command . $dest may induce an error that has to do with "Execution Policies".
+	# If this occurs, run the following commands to allow the profile scripts to run.
+	Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+	. $dest
+}
+
+function InstallPoshGit {
+	Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
+
+	# NOTE: If asked to trust packages from the PowerShell Gallery, answer yes to continue installation of posh-git
+	# NOTE: If the AllowPrerelease parameter is not recognized, update your version of PowerShellGet to >= 1.6 e.g.
+	#       Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
+
+	PowerShellGet\Install-Module posh-git -Scope CurrentUser -AllowPrerelease -Force /y
 }
 
 Function ChangeDefaultApps {
