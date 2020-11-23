@@ -189,4 +189,6 @@ function InstallWindowsTerminal {
 
 function InstallGreenshot {
 	Show-Choco-Menu -Title "Do you want to install Greenshot?" -ChocoInstall "greenshot"
-}
+
+# Call the desired tweak functions
+$tweaks | ForEach { Invoke-Expression $_ }
