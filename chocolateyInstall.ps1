@@ -1,4 +1,4 @@
-#     > powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://git.io/Jk6Ns')"
+#     > powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://git.io/Jk6b8')"
 
 $tweaks = @(
 	### Require administrator privileges ###
@@ -189,7 +189,6 @@ function InstallWindowsTerminal {
 
 function InstallGreenshot {
 	Show-Choco-Menu -Title "Do you want to install Greenshot?" -ChocoInstall "greenshot"
-}
 
 # Call the desired tweak functions
 $tweaks | ForEach { Invoke-Expression $_ }
