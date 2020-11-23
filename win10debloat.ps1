@@ -169,7 +169,7 @@ $tweaks = @(
 	"InstallHyperV", # "UninstallHyperV",
 	"SetPhotoViewerAssociation", # "UnsetPhotoViewerAssociation",
 	"AddPhotoViewerOpenWith", # "RemovePhotoViewerOpenWith",
-	"InstallPDFPrinter"		# "UninstallPDFPrinter",
+	"InstallPDFPrinter",		# "UninstallPDFPrinter",
 	"UninstallXPSPrinter", # "InstallXPSPrinter",
 	"RemoveFaxPrinter", # "AddFaxPrinter",
 
@@ -183,7 +183,7 @@ $tweaks = @(
 
 	### Unpinning ###
 	"UnpinStartMenuTiles",
-	"UnpinTaskbarIcons",
+	"UnpinTaskbarIcons"
 
 	### Auxiliary Functions ###
 )
