@@ -273,8 +273,19 @@ Function TitusRegistryTweaks {
 	Set-ItemProperty -Path $UpdatesPath -Name "ActiveHoursStart" -Type DWord -Value 8
 }
 
-Function InstallJSProgs {
-
+SetPowershellProfile {
+	$dest = $PROFILE.CurrentUserAllHosts
+	if (-not (Test-Path $dest)) {New-Item $dest -Type File -Force }
+	Split-Path $dest | Push-Location
+	Start-BitsTransfer https://raw.githubusercontent.com/neilpa/cmd-colors-solarized/master/Set-SolarizedDarkColorDefaults.ps1
+	Start-BitsTransfer https://raw.githubusercontent.com/JeffrySteegmans/win10script/master/powershell/profile.ps1
+	# Start-BitsTransfer https://raw.githubusercontent.com/ligz08/PowerShell-Profile/master/psfunctions.ps1
+	# Start-BitsTransfer https://raw.githubusercontent.com/ligz08/PowerShell-Profile/master/psaliases.ps1
+	Pop-Location
+	# Note: the last command . $dest may induce an error that has to do with "Execution Policies".
+	# If this occurs, run the following commands to allow the profile scripts to run.
+	Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+	. $dest
 }
 
 Function InstallAdobe {
@@ -369,30 +380,15 @@ function InstallGreenshot {
 	Show-Choco-Menu -Title "Do you want to install Greenshot?" -ChocoInstall "greenshot"
 }
 
-SetPowershellProfile {
-	$dest = $PROFILE.CurrentUserAllHosts
-	if (-not (Test-Path $dest)) {New-Item $dest -Type File -Force }
-	Split-Path $dest | Push-Location
-	Start-BitsTransfer https://raw.githubusercontent.com/neilpa/cmd-colors-solarized/master/Set-SolarizedDarkColorDefaults.ps1
-	Start-BitsTransfer https://raw.githubusercontent.com/JeffrySteegmans/win10script/develop/powershell/profile.ps1
-	# Start-BitsTransfer https://raw.githubusercontent.com/ligz08/PowerShell-Profile/master/psfunctions.ps1
-	# Start-BitsTransfer https://raw.githubusercontent.com/ligz08/PowerShell-Profile/master/psaliases.ps1
-	Pop-Location
-	# Note: the last command . $dest may induce an error that has to do with "Execution Policies".
-	# If this occurs, run the following commands to allow the profile scripts to run.
-	Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-	. $dest
-}
+# function InstallPoshGit {
+# 	Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
 
-function InstallPoshGit {
-	Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
+# 	# NOTE: If asked to trust packages from the PowerShell Gallery, answer yes to continue installation of posh-git
+# 	# NOTE: If the AllowPrerelease parameter is not recognized, update your version of PowerShellGet to >= 1.6 e.g.
+# 	#       Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
 
-	# NOTE: If asked to trust packages from the PowerShell Gallery, answer yes to continue installation of posh-git
-	# NOTE: If the AllowPrerelease parameter is not recognized, update your version of PowerShellGet to >= 1.6 e.g.
-	#       Install-Module PowerShellGet -Scope CurrentUser -Force -AllowClobber
-
-	PowerShellGet\Install-Module posh-git -Scope CurrentUser -AllowPrerelease -Force /y
-}
+# 	PowerShellGet\Install-Module posh-git -Scope CurrentUser -AllowPrerelease -Force /y
+# }
 
 Function ChangeDefaultApps {
 	Write-Output "Setting Default Programs - Notepad++ Chrome VLC IrFanView"
