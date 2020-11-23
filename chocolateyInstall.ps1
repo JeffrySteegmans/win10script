@@ -1,4 +1,4 @@
-#     > powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://git.io/Jk6Ns')"
+#     > powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://git.io/Jk6b8')"
 
 Function RequireAdmin {
 	If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")) {
