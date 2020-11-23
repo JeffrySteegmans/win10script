@@ -1,31 +1,5 @@
 #     > powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('https://git.io/Jk6Ns')"
 
-$tweaks = @(
-	### Require administrator privileges ###
-	"RequireAdmin",
-	"CreateRestorePoint",
-
-	### Chris Titus Tech Additions,
-	"InstallTitusProgs", #REQUIRED FOR OTHER PROGRAM INSTALLS!
-	"Install7Zip",
-	"InstallNotepadplusplus",
-	"InstallIrfanview",
-	"InstallVLC",
-	"InstallAdobe",
-	"InstallBrave",
-	"InstallChrome",
-	"InstallFirefox",
-	"InstallPutty",
-	"InstallVSCode",
-	"InstallConEmu",
-	"InstallmRemoteNg",
-	"InstallNextcloud",
-	"InstallOpenVPN",
-	"InstallWindirStat",
-	"InstallWindowsTerminal",
-  "InstallGreenshot"
-)
-
 Function RequireAdmin {
 	If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")) {
 		Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" $PSCommandArgs" -WorkingDirectory $pwd -Verb RunAs
@@ -99,10 +73,6 @@ function Import-Reg-settings {
 	until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
 }
 
-Function InstallAdobe {
-	Show-Choco-Menu -Title "Do you want to install Adobe Acrobat Reader?" -ChocoInstall "adobereader"
-}
-
 Function InstallBrave {
 	do {
 		Clear-Host
@@ -123,73 +93,29 @@ Function InstallBrave {
 	until ($selection -match "y" -or $selection -match "n" -or $selection -match "q")
 }
 
-Function InstallChrome {
-	Show-Choco-Menu -Title "Do you want to install Chrome?" -ChocoInstall "googlechrome"
-}
+RequireAdmin
+CreateRestorePoint
 
-Function InstallFirefox {
-	Show-Choco-Menu -Title "Do you want to install Firefox?" -ChocoInstall "firefox"
-}
-
-Function Install7Zip {
-	Show-Choco-Menu -Title "Do you want to install 7-Zip?" -ChocoInstall "7zip"
-}
-
-Function InstallNotepadplusplus {
-	Show-Choco-Menu -Title "Do you want to install Notepad++?" -ChocoInstall "notepadplusplus"
-}
-
-Function InstallVLC {
-	Show-Choco-Menu -Title "Do you want to install VLC?" -ChocoInstall "vlc"
-}
-
-Function InstallIrfanview {
-	Show-Choco-Menu -Title "Do you want to install Irfanview?" -ChocoInstall "irfanview"
-}
-
-function InstallPutty {
-	Show-Choco-Menu -Title "Do you want to install Putty?" -ChocoInstall "putty"
-	Import-Reg-settings -Title "Do you want to import Putty settings?" -Filename "putty"
-}
-
-function InstallVSCode {
-	Show-Choco-Menu -Title "Do you want to install Visual Studio Code?" -ChocoInstall "vscode"
-}
-
-function InstallConEmu {
-	Show-Choco-Menu -Title "Do you want to install ConEmu?" -ChocoInstall "conemu"
-}
-
-function InstallGit {
-	Show-Choco-Menu -Title "Do you want to install Git?" -ChocoInstall "git"
-	Show-Choco-Menu -Title "Do you want to install PoshGit?" -ChocoInstall "poshgit"
-	Add-PoshGitToProfile -AllUsers -AllHosts
-	Show-Choco-Menu -Title "Do you want to install Git Extensions?" -ChocoInstall "gitextensions"
-}
-
-function InstallmRemoteNg {
-	Show-Choco-Menu -Title "Do you want to install mRemoteNg?" -ChocoInstall "mremoteng"
-}
-
-function InstallNextcloud {
-	Show-Choco-Menu -Title "Do you want to install Nextcloud?" -ChocoInstall "nextcloud-client"
-}
-
-function InstallOpenVPN {
-	Show-Choco-Menu -Title "Do you want to install OpenVPN?" -ChocoInstall "openvpn"
-}
-
-function InstallWindirStat {
-	Show-Choco-Menu -Title "Do you want to install WindirStat?" -ChocoInstall "windirstat"
-}
-
-function InstallWindowsTerminal {
-	Show-Choco-Menu -Title "Do you want to install Windows Terminal?" -ChocoInstall "microsoft-windows-terminal"
-}
-
-function InstallGreenshot {
-	Show-Choco-Menu -Title "Do you want to install Greenshot?" -ChocoInstall "greenshot"
-}
-
-# Call the desired tweak functions
-$tweaks | ForEach { Invoke-Expression $_ }
+InstallTitusProgs
+InstallBrave
+Show-Choco-Menu -Title "Do you want to install Adobe Acrobat Reader?" -ChocoInstall "adobereader"
+Show-Choco-Menu -Title "Do you want to install Chrome?" -ChocoInstall "googlechrome"
+Show-Choco-Menu -Title "Do you want to install Firefox?" -ChocoInstall "firefox"
+Show-Choco-Menu -Title "Do you want to install 7-Zip?" -ChocoInstall "7zip"
+Show-Choco-Menu -Title "Do you want to install Notepad++?" -ChocoInstall "notepadplusplus"
+Show-Choco-Menu -Title "Do you want to install VLC?" -ChocoInstall "vlc"
+Show-Choco-Menu -Title "Do you want to install Irfanview?" -ChocoInstall "irfanview"
+Show-Choco-Menu -Title "Do you want to install Putty?" -ChocoInstall "putty"
+Import-Reg-settings -Title "Do you want to import Putty settings?" -Filename "putty"
+Show-Choco-Menu -Title "Do you want to install Visual Studio Code?" -ChocoInstall "vscode"
+Show-Choco-Menu -Title "Do you want to install ConEmu?" -ChocoInstall "conemu"
+Show-Choco-Menu -Title "Do you want to install Git?" -ChocoInstall "git"
+Show-Choco-Menu -Title "Do you want to install PoshGit?" -ChocoInstall "poshgit"
+Add-PoshGitToProfile -AllUsers -AllHosts
+Show-Choco-Menu -Title "Do you want to install Git Extensions?" -ChocoInstall "gitextensions"
+Show-Choco-Menu -Title "Do you want to install mRemoteNg?" -ChocoInstall "mremoteng"
+Show-Choco-Menu -Title "Do you want to install Nextcloud?" -ChocoInstall "nextcloud-client"
+Show-Choco-Menu -Title "Do you want to install OpenVPN?" -ChocoInstall "openvpn"
+Show-Choco-Menu -Title "Do you want to install WindirStat?" -ChocoInstall "windirstat"
+Show-Choco-Menu -Title "Do you want to install Windows Terminal?" -ChocoInstall "microsoft-windows-terminal"
+Show-Choco-Menu -Title "Do you want to install Greenshot?" -ChocoInstall "greenshot"
